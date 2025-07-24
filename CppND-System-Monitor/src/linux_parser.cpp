@@ -95,7 +95,7 @@ float LinuxParser::MemoryUtilization()
       }
     }   
   }
-  memUtilisation = (stof(memTotal) - stof(memFree));
+  memUtilisation = (stof(memTotal) - stof(memFree)) / stof(memTotal);
   return memUtilisation;
 }
 
@@ -128,7 +128,6 @@ long LinuxParser::IdleJiffies() { return 0; }
 // TODO: Read and return CPU utilization
 vector<string> LinuxParser::CpuUtilization() { return {}; }
 
-// TODO: Read and return the total number of processes
 int LinuxParser::TotalProcesses() 
 { 
   std::string line, temp, processes;
@@ -148,7 +147,6 @@ int LinuxParser::TotalProcesses()
   return stol(processes);
 }
 
-// TODO: Read and return the number of running processes
 int LinuxParser::RunningProcesses() 
 { 
   std::string line, temp, runningProcesses;
