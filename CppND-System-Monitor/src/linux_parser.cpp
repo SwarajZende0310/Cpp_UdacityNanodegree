@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <filesystem>
 
 #include "linux_parser.h"
 
@@ -59,7 +60,7 @@ vector<int> LinuxParser::Pids() {
     if(std::filesystem::is_directory(entry.status()))
     {
       std::string folderName = entry.path().filename().string();
-      if(std::all_of(folderName.begin(), folderName.end(), isdigit))
+      if(std::all_of(folderName.begin(), folderName.end(), isDigit))
       {
         pids.push_back(std::stoi(folderName));
       } 
@@ -185,3 +186,8 @@ string LinuxParser::User(int pid[[maybe_unused]]) { return string(); }
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
 long LinuxParser::UpTime(int pid[[maybe_unused]]) { return 0; }
+
+bool LinuxParser::isDigit(unsigned char c)
+{
+  return c >= '0' && c <= '9';
+}
