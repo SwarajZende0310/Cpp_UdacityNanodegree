@@ -130,17 +130,20 @@ long LinuxParser::IdleJiffies() { return 0; }
 vector<string> LinuxParser::CpuUtilization()
 {
   vector<std::string> cpus;
-  std::string user, nice, system, idle, iowait, irq, softirq, steal, guest, guest_nice, line;
+  std::string key, user, nice, system, idle, iowait, irq, softirq, steal, guest, guest_nice, line;
 
   std::ifstream stream(kProcDirectory + kStatFilename);
   if(stream.is_open())
   {
-    while(std::getline(stream, line))
+    std::getline(stream, line);
+    std::istringstream linestream(line);
+    while (linestream >> key >> user >> nice >> system >> idle >>
+      iowait >> irq >> softirq >> steal >> guest >> guest_nice) 
     {
-        std::istringstream linestream(line);
-        linestream >> user >> nice >> system >> idle >> iowait >> irq >> softirq >> steal >> guest >> guest_nice;
+      if (key == "cpu") 
+      {
         cpus.push_back(user);
-        cpus.push_back(nice);
+        cpus.push_back(nice);  
         cpus.push_back(system);
         cpus.push_back(idle);
         cpus.push_back(iowait);
@@ -149,7 +152,8 @@ vector<string> LinuxParser::CpuUtilization()
         cpus.push_back(steal);
         cpus.push_back(guest);
         cpus.push_back(guest_nice);
-        break;
+        return cpus;
+      }
     }
   }
   return cpus;
@@ -268,7 +272,7 @@ string LinuxParser::User(int pid)
   }
 
   // Finding the user associated with the process
-  std::string temp2 , username, password, ID, 
+  std::string temp2 , username, password, ID;
   std::ifstream stream2(kPasswordPath);
   if(stream2.is_open())
   {
