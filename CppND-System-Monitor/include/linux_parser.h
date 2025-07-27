@@ -47,6 +47,7 @@ long ActiveJiffies(int pid);
 long IdleJiffies();
 
 // Processes
+std::vector<float> CpuUtilization(int pid);
 std::string Command(int pid);
 std::string Ram(int pid);
 std::string Uid(int pid);
@@ -54,6 +55,15 @@ std::string User(int pid);
 long int UpTime(int pid);
 
 bool isDigit(unsigned char c);
+
+enum ProcessCPUStates {
+  kUtime_ = 14,
+  kStime_ = 15,
+  kCutime_ = 16,
+  kCstime_ = 17,
+  kStarttime_ = 22
+};
+
 };  // namespace LinuxParser
 
 #endif

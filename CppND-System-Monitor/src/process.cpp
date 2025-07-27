@@ -16,15 +16,20 @@ Process::Process(int pid)
     mUser{LinuxParser::User(mPid)},
     mCommand{LinuxParser::Command(mPid)},
     mRam{LinuxParser::Ram(mPid)},
+    mCpuUtilization{0.0},
     mUpTime{LinuxParser::UpTime(mPid)}
 {
+    calculateCPUUtilization();
 }
 
 // TODO: Return this process's ID
 int Process::Pid() { return mPid; }
 
 // TODO: Return this process's CPU utilization
-float Process::CpuUtilization() { return mCpuUtilization; }
+float Process::CpuUtilization() const
+{ 
+  return mCpuUtilization; 
+}
 
 // TODO: Return the command that generated this process
 string Process::Command() { return mCommand; }
@@ -53,4 +58,24 @@ long int Process::UpTime() { return LinuxParser::UpTime(mPid); }
 
 // TODO: Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function
-bool Process::operator<(Process const& a) const { return true; }
+bool Process::operator<(Process const& a) const 
+{ 
+    return this->CpuUtilization() < a.CpuUtilization(); 
+}
+
+void Process::calculateCPUUtilization() 
+{ 
+    long uptime = LinuxParser::UpTime();
+    vector<float> val = LinuxParser::CpuUtilization(Pid());
+    if (val.size() == 5) 
+    {
+        float totaltime = val[LinuxParser::kUtime_] + val[LinuxParser::kStime_] + val[LinuxParser::kCutime_] + val[LinuxParser::kCstime_];
+        totaltime /= sysconf(_SC_CLK_TCK);
+        float seconds = uptime - val[LinuxParser::kStarttime_];
+        mCpuUtilization = totaltime / seconds;
+    } 
+    else
+    {
+        mCpuUtilization = 0;
+    }
+}
