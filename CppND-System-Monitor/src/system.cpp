@@ -31,10 +31,6 @@ vector<Process>& System::Processes()
         Process process(pid);
         processes_.push_back(process);
     }
-    // sort(processes_.begin(), processes_.end(),
-    //    [](Process& pa, Process& pb) {
-    //      return (pb.CpuUtilization() < pa.CpuUtilization());
-    //    });
     sort(processes_.begin(), processes_.end());
     return processes_; 
 }

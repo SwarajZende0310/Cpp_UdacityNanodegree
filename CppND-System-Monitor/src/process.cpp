@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include "process.h"
 #include "linux_parser.h"
@@ -60,7 +61,7 @@ long int Process::UpTime() { return LinuxParser::UpTime(mPid); }
 // REMOVE: [[maybe_unused]] once you define the function
 bool Process::operator<(Process const& a) const 
 { 
-    return this->CpuUtilization() < a.CpuUtilization(); 
+    return this->CpuUtilization() > a.CpuUtilization(); 
 }
 
 void Process::calculateCPUUtilization() 
@@ -69,9 +70,12 @@ void Process::calculateCPUUtilization()
     vector<float> val = LinuxParser::CpuUtilization(Pid());
     if (val.size() == 5) 
     {
-        float totaltime = val[LinuxParser::kUtime_] + val[LinuxParser::kStime_] + val[LinuxParser::kCutime_] + val[LinuxParser::kCstime_];
-        totaltime /= sysconf(_SC_CLK_TCK);
-        float seconds = uptime - val[LinuxParser::kStarttime_];
+        float totaltime = 0;
+        for(int i=0; i<4; i++)
+        {
+            totaltime += val[i];
+        }
+        float seconds = uptime - val[4];
         mCpuUtilization = totaltime / seconds;
     } 
     else

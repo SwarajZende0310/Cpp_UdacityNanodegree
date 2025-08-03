@@ -215,7 +215,7 @@ std::vector<float> LinuxParser::CpuUtilization(int pid)
         if (i == kUtime_ || i == kStime_ || i == kCutime_ || i == kCstime_ ||
             i == kStarttime_) 
         {
-          time = std::stof(value);
+          time = std::stof(value)/ sysconf(_SC_CLK_TCK);
           cpuValues.push_back(time);
         }
       }
