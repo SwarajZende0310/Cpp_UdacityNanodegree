@@ -42,7 +42,7 @@ string Process::Ram()
     // Convert to MB
     try
     {
-        ram = std::to_string(stof(ram) / 1024);
+        ram = std::to_string(stol(ram) / 1024);
     }
     catch(const std::exception& e)
     {

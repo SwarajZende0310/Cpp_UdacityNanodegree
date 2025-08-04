@@ -335,8 +335,7 @@ long LinuxParser::UpTime(int pid)
     }
     return stol(uptime);
   }
-
-  
+  return 0;
 }
 
 bool LinuxParser::isDigit(unsigned char c)

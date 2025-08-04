@@ -24,8 +24,8 @@ float Processor::Utilization()
     float irq = stof(cpus[LinuxParser::kIRQ_]);
     float softirq = stof(cpus[LinuxParser::kSoftIRQ_]);
     float steal = stof(cpus[LinuxParser::kSteal_]);
-    float guest = stof(cpus[LinuxParser::kGuest_]);
-    float guest_nice = stof(cpus[LinuxParser::kGuestNice_]);
+    // float guest = stof(cpus[LinuxParser::kGuest_]);
+    // float guest_nice = stof(cpus[LinuxParser::kGuestNice_]);
 
     float totalCpuTime = user + nice + system + idle + iowait + irq + softirq + steal;
     float idleTime = idle + iowait;
